@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, useInView } from 'framer-motion'
-import { X402Checkout } from '@/components/x402/X402Checkout'
+import { PaymentOptions } from '@/components/stripe/PaymentOptions'
 import {
   frameworkOptions,
   styleOptions,
@@ -313,22 +313,17 @@ export default function Home() {
                   <span className="text-zinc-400 text-sm mb-1">USDC / one-time</span>
                 </div>
 
-                <X402Checkout
-                  endpoint="/api/pro-pack"
-                  productName="RulesForge Pro Pack"
-                  price="$29"
-                  description="50 battle-tested rule files for 15+ frameworks. Commercial license included."
-                  onSuccess={() => router.push('/success')}
-                  accentColor="#06b6d4"
-                >
-                  <motion.span
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="mt-6 inline-flex items-center justify-center rounded-lg bg-cyan-500 px-8 py-3.5 min-h-[48px] text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
-                  >
-                    Get Pro Pack
-                  </motion.span>
-                </X402Checkout>
+                <div className="mt-6 max-w-sm">
+                  <PaymentOptions
+                    productName="RulesForge Pro Pack"
+                    price={29}
+                    description="50 battle-tested rule files for 15+ frameworks. Commercial license included."
+                    x402Endpoint="/api/pro-pack"
+                    successUrl="/success"
+                    onX402Success={() => router.push('/success')}
+                    accentColor="#06b6d4"
+                  />
+                </div>
               </div>
 
               {/* File list preview */}
@@ -465,22 +460,17 @@ export default function Home() {
             </div>
 
             <div className="mt-8 text-center">
-              <X402Checkout
-                endpoint="/api/pro-pack"
-                productName="RulesForge Pro Pack"
-                price="$29"
-                description="50 battle-tested rule files for 15+ frameworks. Commercial license included."
-                onSuccess={() => router.push('/success')}
-                accentColor="#06b6d4"
-              >
-                <motion.span
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center justify-center rounded-lg bg-cyan-500 px-8 py-3 min-h-[48px] text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
-                >
-                  Get Pro Pack — $29 USDC
-                </motion.span>
-              </X402Checkout>
+              <div className="max-w-sm mx-auto">
+                <PaymentOptions
+                  productName="RulesForge Pro Pack"
+                  price={29}
+                  description="50 battle-tested rule files for 15+ frameworks. Commercial license included."
+                  x402Endpoint="/api/pro-pack"
+                  successUrl="/success"
+                  onX402Success={() => router.push('/success')}
+                  accentColor="#06b6d4"
+                />
+              </div>
             </div>
           </div>
         </FadeInUp>
@@ -543,8 +533,8 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs text-zinc-400">
           <p>&copy; {new Date().getFullYear()} RulesForge. An AI Business Factory product.</p>
           <div className="flex items-center gap-4">
-            <span>Payments powered by x402</span>
-            <span>Built on Base</span>
+            <span>Payments via Stripe + x402</span>
+            <span>Card, Apple Pay, Google Pay, USDC</span>
           </div>
         </div>
       </footer>
