@@ -16,6 +16,7 @@ import {
 } from '@/lib/rules-data'
 import EmailCapture from '@/components/EmailCapture'
 import { FAQAccordion } from '@/components/FAQAccordion'
+import { EcosystemFooter } from '@/components/EcosystemFooter'
 
 function FadeInUp({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   return (
@@ -523,69 +524,7 @@ export default function Home() {
         </FadeInUp>
       </section>
 
-      {/* Cross-sell Footer */}
-      <section className="border-t border-zinc-800/50 mt-12 sm:mt-20">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
-          <FadeInUp>
-            <div className="text-center mb-8 sm:mb-10">
-              <p className="text-sm text-zinc-400 uppercase tracking-wider">From AI Business Factory</p>
-              <h3 className="mt-2 text-lg sm:text-xl font-bold tracking-tight">More tools for builders</h3>
-            </div>
-          </FadeInUp>
-
-          <FadeInUp delay={0.1}>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-              {[
-                {
-                  name: 'Veloce Kit',
-                  desc: 'Launch your SaaS in 48 hours. Next.js boilerplate with auth, payments, and AI built in.',
-                  price: '$247',
-                  href: 'https://velocekit.com',
-                },
-                {
-                  name: 'PageForge',
-                  desc: 'AI landing pages that convert. Generate, deploy, and optimize in minutes.',
-                  price: '$49/mo',
-                  href: 'https://pageforge.ai',
-                },
-                {
-                  name: 'PromptForge',
-                  desc: 'Premium prompt library for developers. 200+ tested prompts for coding, writing, analysis.',
-                  price: '$19',
-                  href: 'https://promptforge.dev',
-                },
-              ].map((product) => (
-                <motion.a
-                  key={product.name}
-                  href={product.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.02, borderColor: 'rgba(6, 182, 212, 0.3)' }}
-                  className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4 sm:p-5 transition-colors hover:bg-zinc-900/60 block"
-                >
-                  <div className="flex items-center justify-between mb-2 sm:mb-3">
-                    <span className="text-sm font-semibold text-white">{product.name}</span>
-                    <span className="text-xs text-cyan-400 font-medium">{product.price}</span>
-                  </div>
-                  <p className="text-xs text-zinc-400 leading-relaxed">{product.desc}</p>
-                </motion.a>
-              ))}
-            </div>
-          </FadeInUp>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-zinc-800/50 py-6 sm:py-8">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs text-zinc-400">
-          <p>&copy; {new Date().getFullYear()} RulesForge. An AI Business Factory product.</p>
-          <div className="flex items-center gap-4">
-            <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
-            <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
-            <span>Card, Apple Pay, USDC accepted</span>
-          </div>
-        </div>
-      </footer>
+      <EcosystemFooter currentProduct="RulesForge" />
     </div>
   )
 }
