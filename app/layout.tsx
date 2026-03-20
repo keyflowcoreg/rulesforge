@@ -66,27 +66,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${jetbrainsMono.variable} h-full antialiased dark`}>
       <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
-              name: "RulesForge",
-              description:
-                "Generate battle-tested .cursorrules and CLAUDE.md files for any stack. Free generator + Pro Pack with advanced configs.",
-              url: "https://rulesforge.com",
-              applicationCategory: "DeveloperApplication",
-              operatingSystem: "Web",
-              offers: {
-                "@type": "Offer",
-                price: "29",
-                priceCurrency: "USD",
-                availability: "https://schema.org/InStock",
-              },
-            }),
-          }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "RulesForge",
+          "description": "AI coding rules generator",
+          "applicationCategory": "DeveloperApplication",
+          "operatingSystem": "Web",
+          "offers": {
+            "@type": "Offer",
+            "price": "29",
+            "priceCurrency": "USD"
+          }
+        }) }} />
       </head>
       <body className="min-h-full flex flex-col bg-zinc-950 text-white font-mono">
         <Analytics product="rulesforge" />
