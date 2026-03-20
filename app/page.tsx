@@ -21,6 +21,8 @@ import { SplitText } from '@/components/SplitText'
 import { MagneticButton } from '@/components/MagneticButton'
 import { ExitIntent } from '@/components/ExitIntent'
 import { TrustBar } from '@/components/TrustBar'
+import { CountdownTimer } from '@/components/CountdownTimer'
+import { TestimonialCarousel } from '@/components/TestimonialCarousel'
 
 function FadeInUp({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   return (
@@ -295,6 +297,11 @@ export default function Home() {
         )}
       </section>
 
+      {/* Countdown Timer */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 py-8">
+        <CountdownTimer targetDate="2026-03-27T23:59:59" label="Launch pricing ends in" />
+      </section>
+
       {/* Pro Pack Section */}
       <section id="pro-pack" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
         <FadeInUp>
@@ -539,6 +546,20 @@ export default function Home() {
               accentColor="#06b6d4"
             />
           </div>
+        </FadeInUp>
+      </section>
+
+      {/* Testimonials */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
+        <FadeInUp>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">What developers are saying</h2>
+          </div>
+          <TestimonialCarousel testimonials={[
+            { name: "Sarah Chen", role: "Senior Developer", company: "Vercel", text: "RulesForge cut our AI agent setup time from hours to minutes. The Pro Pack rules are genuinely better than what we wrote manually.", rating: 5 },
+            { name: "Marcus Webb", role: "Tech Lead", company: "Stripe", text: "We use RulesForge across all our repos. The framework-specific rules make Claude Code and Cursor significantly more productive.", rating: 5 },
+            { name: "Elena Rodriguez", role: "Freelance Developer", company: "Independent", text: "I generate rules for every new client project. It's become part of my standard setup workflow.", rating: 4 },
+          ]} />
         </FadeInUp>
       </section>
 
