@@ -44,24 +44,28 @@ const rulesTemplates: Record<string, string> = {
 - Colocate components with their routes in app/
 - Shared components go in components/
 - Server Components by default; add 'use client' only when needed
+- Keep route segments shallow — max 3 levels deep
 
 ### TypeScript
 - strict: true in tsconfig.json — no exceptions
 - No \`any\` types — use \`unknown\` and narrow
 - Prefer \`interface\` for object shapes, \`type\` for unions/intersections
 - All function parameters and return types must be explicitly typed
+- Use \`satisfies\` for type-safe object literals
 
 ### Components
 - Server Components by default
 - Client Components only for: interactivity, browser APIs, state, effects
 - Never import server-only code in Client Components
 - Use React.Suspense for async Server Components
+- Colocate styles — no global CSS for component-specific styles
 
 ### Data Fetching
 - Use Server Components + async/await for data fetching
 - No useEffect for data fetching — use Server Components
 - Cache with \`unstable_cache\` or React \`cache()\` for deduplication
 - Always handle loading states with loading.tsx
+- Use \`revalidatePath\` / \`revalidateTag\` for cache invalidation
 
 ### Performance
 - Use next/image for all images — no raw <img> tags
@@ -69,11 +73,13 @@ const rulesTemplates: Record<string, string> = {
 - Implement proper metadata with generateMetadata
 - Use dynamic imports for heavy client components
 - Keep Client Component bundles small
+- Prefer streaming with Suspense over waterfalls
 
 ### Error Handling
 - Every route segment should have an error.tsx boundary
 - Use notFound() for 404 cases, not redirects
 - Log errors server-side, show user-friendly messages client-side
+- Use global-error.tsx for root-level errors
 
 ### Testing
 - Use Vitest for unit tests
@@ -86,6 +92,7 @@ const rulesTemplates: Record<string, string> = {
 - Use server actions for mutations — never expose API keys client-side
 - Implement rate limiting on API routes
 - Sanitize user-generated content before rendering
+- Use \`server-only\` package to prevent server code leaking to client
 
 ### Git Conventions
 - Conventional commits: feat|fix|docs|refactor|test|chore
@@ -109,30 +116,42 @@ const rulesTemplates: Record<string, string> = {
 - Props interface defined above component, exported separately
 - Use composition over prop drilling
 - Maximum 150 lines per component file
+- One component per file, name matches filename
 
 ### TypeScript
 - strict: true — no exceptions
 - No \`any\` — use \`unknown\` and type guards
 - Generic components where reuse is needed
 - Discriminated unions for complex state
+- Use \`as const\` for literal types
+
+### Hooks
+- Custom hooks for any reusable logic
+- Hooks must start with \`use\` prefix
+- No hooks inside conditions or loops
+- Extract complex hook logic into separate files
+- Prefer useReducer over useState for complex state
 
 ### State Management
 - Local state with useState for UI-only state
 - Zustand for shared/global state
 - React Query/TanStack Query for server state
 - No Redux unless absolutely necessary
+- Derive state — don't sync state
 
 ### Performance
 - React.memo only when profiler shows re-render issues
 - useMemo/useCallback for expensive computations and stable references
 - Virtualize long lists (TanStack Virtual)
 - Code-split routes with React.lazy + Suspense
+- Use React DevTools Profiler before optimizing
 
 ### Testing
 - React Testing Library for component tests
 - Test behavior, not implementation
 - MSW for API mocking
 - 80%+ coverage on business logic
+- Test accessibility with jest-axe
 `,
 
   Python: `# CLAUDE.md — Python Production Rules
@@ -151,23 +170,39 @@ const rulesTemplates: Record<string, string> = {
 - Dataclasses or Pydantic models for structured data
 - No mutable default arguments
 - Use pathlib.Path instead of os.path
+- Prefer f-strings over .format() or %
+
+### Project Structure
+- src/ layout for packages
+- Separate concerns: models, services, repositories, routes
+- Config via environment variables, never hardcoded
+- Use __all__ to control public API
 
 ### Error Handling
 - Custom exception hierarchy per domain
 - Never catch bare Exception — be specific
 - Use contextlib for resource management
 - Log exceptions with structured logging (structlog)
+- Raise, don't return error codes
+
+### Async
+- Use asyncio for I/O-bound operations
+- Never mix sync and async without run_in_executor
+- Use async context managers for connections
+- Prefer gather() over sequential awaits
 
 ### Testing
 - pytest with fixtures, no unittest.TestCase
 - Parametrize for multiple input scenarios
 - Use factories (factory_boy) over fixtures for test data
 - 90%+ coverage on business logic
+- Use hypothesis for property-based testing
 
 ### Dependencies
 - Pin exact versions in requirements.txt / pyproject.toml
 - Use virtual environments always
 - Minimal dependency policy — stdlib first
+- Audit dependencies for known vulnerabilities
 `,
 
   Go: `# CLAUDE.md — Go Production Rules
@@ -185,24 +220,41 @@ const rulesTemplates: Record<string, string> = {
 - Accept interfaces, return structs
 - Error handling: always check errors, wrap with fmt.Errorf + %w
 - No init() functions unless absolutely necessary
+- Keep functions under 40 lines
+
+### Project Structure
+- Follow Standard Go Project Layout
+- Internal packages for non-exported code
+- cmd/ for entry points, pkg/ for libraries
+- One package per directory, meaningful package names
 
 ### Naming
 - Short variable names in small scopes (i, v, ctx)
 - Descriptive names for exported functions and types
 - Package names: short, lowercase, no underscores
 - Interface names: -er suffix for single-method (Reader, Writer)
+- Acronyms in all caps: HTTP, URL, ID
 
 ### Concurrency
 - Don't start goroutines without knowing how they stop
 - Use context.Context for cancellation
 - Prefer channels for communication, mutexes for state
 - Use errgroup for parallel work with error handling
+- Always handle context cancellation in long-running operations
+
+### Error Handling
+- Errors are values — handle them, don't ignore them
+- Use sentinel errors sparingly (errors.Is)
+- Wrap errors with context: fmt.Errorf("doing X: %w", err)
+- Custom error types for domain-specific errors
+- Return early on errors — avoid deep nesting
 
 ### Testing
 - Table-driven tests as default pattern
 - Test the public API, not internals
 - Use testcontainers for integration tests
 - Benchmark critical paths
+- Use t.Parallel() for independent tests
 `,
 
   Rust: `# CLAUDE.md — Rust Production Rules
@@ -221,24 +273,375 @@ const rulesTemplates: Record<string, string> = {
 - Prefer &str over String in function parameters
 - Use thiserror for library errors, anyhow for applications
 - Derive traits in consistent order: Debug, Clone, PartialEq, Eq, Hash
+- Document all public items with /// doc comments
 
 ### Ownership
 - Prefer borrowing over cloning
 - Use Cow<str> for flexible ownership
 - Arc only when shared across threads
 - Box for recursive types and trait objects
+- Minimize lifetime annotations — let the compiler infer
 
 ### Error Handling
 - Custom error types per module with thiserror
 - Never unwrap() in production code — use expect() with context or ?
 - Result<T, E> for all fallible operations
 - Map errors at boundaries with .map_err()
+- Use anyhow::Context for adding context to errors
+
+### Performance
+- Avoid allocations in hot paths
+- Use iterators over indexed loops
+- Prefer stack allocation (arrays) over heap (Vec) for small fixed sizes
+- Profile before optimizing — use flamegraph
 
 ### Testing
 - Unit tests in same file (mod tests)
 - Integration tests in tests/ directory
 - Property-based testing with proptest for parsers/serializers
 - Benchmark with criterion
+- Use #[should_panic] for expected failure tests
+`,
+
+  TypeScript: `# CLAUDE.md — TypeScript Production Rules
+# Generated by RulesForge (rulesforge.com)
+
+## Project Overview
+- Language: TypeScript 5.x (strict mode)
+- Runtime: Node.js 22+
+- Formatter: Prettier + ESLint
+- Testing: Vitest
+
+## Architecture Rules
+
+### TypeScript Config
+- strict: true — always, no exceptions
+- noUncheckedIndexedAccess: true for safe array/object access
+- exactOptionalPropertyTypes: true
+- No \`any\` — use \`unknown\` and narrow with type guards
+- Enable all strict family options
+
+### Type Design
+- Prefer \`interface\` for object shapes (extendable)
+- Use \`type\` for unions, intersections, mapped types
+- Discriminated unions for state machines and variants
+- Use \`satisfies\` for type checking without widening
+- Use \`as const\` for literal types and tuples
+- Template literal types for string patterns
+
+### Functions
+- Explicit return types on exported functions
+- Use function overloads for polymorphic APIs
+- Prefer readonly parameters for immutability
+- Use generics with constraints, not \`any\`
+- Avoid optional parameters — prefer object arguments
+
+### Patterns
+- Use branded types for type-safe IDs: \`type UserId = string & { __brand: 'UserId' }\`
+- Result pattern for error handling: \`type Result<T, E> = { ok: true; value: T } | { ok: false; error: E }\`
+- Use Zod for runtime validation matching TypeScript types
+- Never use type assertions (\`as\`) — narrow with guards
+- Use exhaustive checks: \`const _: never = unreachableValue\`
+
+### Module Design
+- Barrel exports (index.ts) for clean public API
+- Internal modules not re-exported
+- One concern per file
+- Circular dependency detection in CI
+
+### Testing
+- Vitest with type-level testing (expectTypeOf)
+- Test edge cases with unusual types
+- Mock at module boundaries, not implementation details
+- 90%+ coverage on business logic
+`,
+
+  Vue: `# CLAUDE.md — Vue 3 Production Rules
+# Generated by RulesForge (rulesforge.com)
+
+## Project Overview
+- Framework: Vue 3.5+ (Composition API)
+- Language: TypeScript (strict mode)
+- Build: Vite
+- State: Pinia
+- Routing: Vue Router 4
+
+## Architecture Rules
+
+### Component Design
+- Composition API with \`<script setup lang="ts">\` — always
+- No Options API in new code
+- Single File Components (.vue) with template/script/style order
+- Maximum 200 lines per component
+- Extract composables for reusable logic
+
+### TypeScript
+- strict: true — no exceptions
+- Define props with \`defineProps<T>()\` generic syntax
+- Define emits with \`defineEmits<T>()\` generic syntax
+- Type all refs: \`const count = ref<number>(0)\`
+- Use \`ComponentInstance\` type for template refs
+
+### State Management
+- Pinia stores for shared state
+- Composables for component-local reusable state
+- Define stores with Setup syntax for full TypeScript support
+- Keep stores lean — derive computed values, don't store duplicates
+- Use \`storeToRefs()\` to maintain reactivity when destructuring
+
+### Reactivity
+- Use \`ref()\` for primitives, \`reactive()\` for objects
+- Never destructure reactive objects — loses reactivity
+- Use \`computed()\` for derived values — never manual syncing
+- Use \`watchEffect()\` over \`watch()\` when possible
+- Use \`shallowRef()\` for large objects that replace entirely
+
+### Performance
+- Use \`v-once\` for static content
+- Use \`v-memo\` for expensive list items
+- Lazy-load routes with dynamic imports
+- Use \`defineAsyncComponent\` for heavy components
+- Use \`<KeepAlive>\` for tab-based navigation
+
+### Testing
+- Vitest + Vue Testing Library
+- Test component behavior, not internals
+- Use \`mount()\` for integration, \`shallowMount()\` for isolation
+- Mock Pinia stores in component tests
+- E2E with Playwright or Cypress
+`,
+
+  Svelte: `# CLAUDE.md — Svelte 5 Production Rules
+# Generated by RulesForge (rulesforge.com)
+
+## Project Overview
+- Framework: SvelteKit 2+ / Svelte 5
+- Language: TypeScript (strict mode)
+- Styling: Tailwind CSS
+- State: Svelte Runes
+
+## Architecture Rules
+
+### Svelte 5 Runes
+- Use \`$state()\` for reactive state — replaces let bindings
+- Use \`$derived()\` for computed values — replaces $: reactive statements
+- Use \`$effect()\` for side effects — replaces $: reactive blocks
+- Use \`$props()\` for component props — replaces export let
+- Use \`$bindable()\` for two-way binding props
+
+### Component Design
+- One component per .svelte file
+- Props via \`$props()\` with TypeScript types
+- Keep components under 150 lines
+- Extract logic into .svelte.ts modules (rune-aware)
+- Use snippets for render delegation
+
+### SvelteKit
+- File-based routing in routes/
+- Use \`+page.ts\` / \`+page.server.ts\` for data loading
+- Server-only code in +page.server.ts and +server.ts
+- Form actions for mutations — not fetch calls
+- Use \`+layout.ts\` for shared data loading
+
+### TypeScript
+- strict: true in tsconfig.json
+- Type all props, events, and store values
+- Use \`satisfies\` for page data types
+- Generated types from \`./$types\` for load functions
+
+### Performance
+- SvelteKit uses streaming SSR by default — leverage it
+- Use \`{#await}\` blocks for async data
+- Lazy load heavy components with dynamic imports
+- Preload data with \`data-sveltekit-preload-data\`
+- Minimize client-side JavaScript — Svelte compiles away
+
+### Testing
+- Vitest for unit tests
+- Playwright for E2E
+- Test stores and utilities separately
+- Use \`@testing-library/svelte\` for component tests
+`,
+
+  Django: `# CLAUDE.md — Django Production Rules
+# Generated by RulesForge (rulesforge.com)
+
+## Project Overview
+- Framework: Django 5.x + Django REST Framework
+- Language: Python 3.12+ (type hints required)
+- Testing: pytest-django
+- Database: PostgreSQL
+
+## Architecture Rules
+
+### Project Structure
+- One app per domain concern (users, orders, payments)
+- Keep apps small and focused — max 10 models per app
+- Config in settings/ directory with base, local, production splits
+- Use environment variables for all secrets and config
+
+### Models
+- Explicit field types — no implicit defaults
+- Use Meta class: ordering, indexes, constraints
+- UUIDs for public-facing IDs, auto-increment for internal
+- Soft deletes via \`is_active\` field, not model deletion
+- Custom managers for common queries
+- Always set \`on_delete\` explicitly on ForeignKey
+
+### Views & Serializers (DRF)
+- ViewSets for CRUD, APIView for custom logic
+- Serializers validate ALL input — never trust client data
+- Use \`select_related\` / \`prefetch_related\` to avoid N+1
+- Pagination on all list endpoints
+- Permission classes on every view
+
+### Business Logic
+- Keep views thin — logic goes in services/
+- Never put business logic in models or serializers
+- Service functions accept validated data, return domain objects
+- Use Django signals sparingly — prefer explicit calls
+
+### Security
+- CSRF protection on all forms
+- Use Django's ORM — no raw SQL unless absolutely necessary
+- Rate limiting on authentication endpoints
+- Validate file uploads (size, type, content)
+- Keep SECRET_KEY truly secret — never in version control
+
+### Testing
+- pytest-django with fixtures
+- Factory Boy for test data
+- Test views, serializers, and services separately
+- Use \`@pytest.mark.django_db\` for database tests
+- Minimum 85% coverage
+`,
+
+  FastAPI: `# CLAUDE.md — FastAPI Production Rules
+# Generated by RulesForge (rulesforge.com)
+
+## Project Overview
+- Framework: FastAPI 0.110+
+- Language: Python 3.12+ (strict typing)
+- Validation: Pydantic v2
+- Testing: pytest + httpx
+- Database: SQLAlchemy 2.x async
+
+## Architecture Rules
+
+### Project Structure
+- Separate routers by domain: /api/v1/users, /api/v1/orders
+- Dependencies in deps/ module
+- Schemas (Pydantic models) separate from ORM models
+- Config via pydantic-settings with .env support
+
+### Pydantic v2
+- Use \`model_validator\` for cross-field validation
+- Separate request and response schemas
+- Use \`Field()\` with description for OpenAPI docs
+- ConfigDict with strict=True for strict validation
+- Use discriminated unions for polymorphic responses
+
+### Async
+- All route handlers async by default
+- Use async SQLAlchemy sessions
+- Never block the event loop — use \`run_in_executor\` for sync I/O
+- Use \`asyncio.gather()\` for parallel I/O operations
+- Async context managers for database connections
+
+### Dependency Injection
+- Use \`Depends()\` for all shared logic
+- Database sessions via dependency
+- Auth/user extraction via dependency chain
+- Cache expensive dependencies with \`functools.lru_cache\`
+
+### Error Handling
+- Custom exception handlers for domain errors
+- HTTPException for HTTP-specific errors only
+- Structured error responses with error codes
+- Log all 5xx errors with full context
+- Never expose stack traces in production
+
+### Security
+- OAuth2 with JWT for authentication
+- Rate limiting with slowapi
+- CORS configuration — no wildcard in production
+- Input validation on all endpoints (Pydantic handles this)
+- SQL injection prevention via ORM — no raw queries
+
+### Testing
+- httpx.AsyncClient for testing async endpoints
+- Test each endpoint: happy path + edge cases + auth
+- Use dependency overrides for mocking
+- Separate unit tests and integration tests
+- 90%+ coverage on route handlers
+`,
+
+  Express: `# CLAUDE.md — Express.js Production Rules
+# Generated by RulesForge (rulesforge.com)
+
+## Project Overview
+- Framework: Express.js 5.x
+- Language: TypeScript (strict mode)
+- Validation: Zod
+- Testing: Vitest + Supertest
+- ORM: Drizzle or Prisma
+
+## Architecture Rules
+
+### Project Structure
+- Route files in routes/ — one per resource
+- Controllers handle HTTP, services handle business logic
+- Middleware in middleware/ — typed request extensions
+- Shared types in types/ directory
+- Config via environment variables with typed schema
+
+### TypeScript
+- strict: true — no exceptions
+- Type all request handlers: \`Request<Params, ResBody, ReqBody, Query>\`
+- Extend Express types for custom middleware (auth user, etc.)
+- No \`any\` in route handlers — validate and type narrow
+
+### Middleware
+- Error handling middleware at the end of the chain
+- Async wrapper for all async route handlers (no unhandled rejections)
+- Request validation middleware using Zod schemas
+- Auth middleware returns typed user object
+- Rate limiting on all public endpoints
+
+### Validation
+- Zod schemas for all request bodies
+- Validate params, query, and body separately
+- Return structured validation errors with field paths
+- Share types between frontend/backend via Zod inference
+
+### Error Handling
+- Custom AppError class with status code and error code
+- Global error handler catches all errors
+- Never send stack traces to client in production
+- Log errors with structured logging (pino/winston)
+- Different error formats for API vs rendered responses
+
+### Security
+- Helmet.js for security headers
+- CORS with explicit allowed origins
+- Rate limiting per IP and per user
+- Input sanitization for XSS prevention
+- SQL injection prevention via ORM — no raw queries
+- Use express-session with secure cookie settings
+
+### Testing
+- Supertest for integration tests
+- Mock services in controller tests
+- Test middleware in isolation
+- Test error handling paths
+- 85%+ coverage on routes and services
+
+### Performance
+- Enable compression middleware
+- Use connection pooling for database
+- Implement response caching where appropriate
+- Use streaming responses for large payloads
+- Profile with clinic.js for bottleneck detection
 `,
 }
 
@@ -249,12 +652,48 @@ export function generateRules(
 ): string {
   let base = rulesTemplates[framework] || rulesTemplates['Next.js']
 
+  // Add style-specific sections
+  if (styles.includes('Strict TypeScript') && !['TypeScript'].includes(framework)) {
+    base += `\n## Strict TypeScript
+- strict: true and noUncheckedIndexedAccess: true
+- No \`any\` types anywhere — use \`unknown\` and narrow
+- Explicit return types on all exported functions
+- Use \`satisfies\` operator for type-safe object literals
+- Enable all strict family tsconfig options
+`
+  }
+
   if (styles.includes('TDD')) {
     base += `\n## TDD Workflow
-- Write test FIRST, see it fail
-- Write minimal code to pass
-- Refactor with green tests
-- No code without a corresponding test
+- Write test FIRST, see it fail (Red)
+- Write minimal code to pass (Green)
+- Refactor with green tests (Refactor)
+- No production code without a corresponding test
+- Test names describe behavior: "should X when Y"
+- Keep tests fast — mock external dependencies
+- Run tests on every save during development
+`
+  }
+
+  if (styles.includes('Minimal comments')) {
+    base += `\n## Minimal Comments Policy
+- Code should be self-documenting — use clear names
+- Comments explain WHY, never WHAT
+- No commented-out code — use version control
+- JSDoc/docstrings only on public APIs
+- TODO comments must include ticket/issue number
+- Delete stale comments aggressively
+`
+  }
+
+  if (styles.includes('Functional style')) {
+    base += `\n## Functional Style
+- Pure functions by default — no side effects
+- Immutable data — never mutate arguments
+- Use map/filter/reduce over imperative loops
+- Compose small functions into pipelines
+- Separate pure logic from I/O at the boundaries
+- Prefer const over let — never use var
 `
   }
 
@@ -264,16 +703,24 @@ export function generateRules(
 - Time to Interactive: < 3s
 - Bundle size per route: < 100KB gzipped
 - Lighthouse score: > 90 on all metrics
+- Profile before optimizing — measure, don't guess
+- Use lazy loading for below-the-fold content
+- Optimize images: WebP/AVIF, responsive sizes
+- Database queries: < 50ms for common operations
 `
   }
 
+  // Add team size section
   if (teamSize === 'Enterprise') {
     base += `\n## Enterprise Standards
-- All PRs require 2 approvals
+- All PRs require 2 approvals minimum
 - Mandatory CI/CD pipeline pass before merge
 - Documentation required for all public APIs
 - ADR (Architecture Decision Records) for significant changes
-- Security review for auth/payment changes
+- Security review for auth/payment/PII changes
+- Automated dependency scanning (Dependabot/Renovate)
+- Changelog maintained with each release
+- Feature flags for gradual rollouts
 `
   } else if (teamSize === 'Small team') {
     base += `\n## Team Conventions
@@ -281,10 +728,19 @@ export function generateRules(
 - Automated CI checks must pass
 - Update README for new features
 - Weekly dependency updates
+- Code review within 24 hours
+- Shared conventions doc maintained by team
+`
+  } else {
+    base += `\n## Solo Developer Notes
+- Write code as if a teammate will join tomorrow
+- Commit often with descriptive messages
+- Keep a decision log for architecture choices
+- Automate everything you do twice
 `
   }
 
-  return base
+  return base.trim()
 }
 
 export const proPackFiles = [

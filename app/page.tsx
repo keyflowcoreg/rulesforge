@@ -16,15 +16,11 @@ import {
 } from '@/lib/rules-data'
 
 function FadeInUp({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px' })
-
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-      transition={{ duration: 0.6, delay, ease: 'easeOut' }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay, ease: 'easeOut' }}
       className={className}
     >
       {children}
@@ -39,6 +35,7 @@ export default function Home() {
   const [teamSize, setTeamSize] = useState<TeamSize>('Solo')
   const [generatedRules, setGeneratedRules] = useState<string>('')
   const [copied, setCopied] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const toggleStyle = (style: StyleOption) => {
     setSelectedStyles((prev) =>
@@ -60,51 +57,77 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-zinc-950">
       {/* Header */}
-      <header className="border-b border-zinc-800/50">
-        <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
+      <header className="border-b border-zinc-800/50 sticky top-0 z-40 bg-zinc-950/80 backdrop-blur-md">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="h-8 w-8 rounded-lg bg-cyan-500 flex items-center justify-center text-black font-bold text-sm">
               RF
             </div>
             <span className="text-lg font-semibold tracking-tight">RulesForge</span>
           </div>
-          <nav className="flex items-center gap-6 text-sm text-zinc-400">
+
+          {/* Desktop nav */}
+          <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-400">
             <a href="#generator" className="hover:text-white transition-colors">Generator</a>
             <a href="#pro-pack" className="hover:text-white transition-colors">Pro Pack</a>
             <a href="#compare" className="hover:text-white transition-colors">Compare</a>
           </nav>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="sm:hidden flex items-center justify-center h-10 w-10 rounded-lg text-zinc-400 hover:text-white transition-colors"
+            aria-label="Toggle menu"
+          >
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {mobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
+
+        {/* Mobile nav dropdown */}
+        {mobileMenuOpen && (
+          <div className="sm:hidden border-t border-zinc-800/50 bg-zinc-950/95 backdrop-blur-md px-4 py-3 space-y-1">
+            <a href="#generator" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm text-zinc-400 hover:text-white transition-colors">Generator</a>
+            <a href="#pro-pack" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm text-zinc-400 hover:text-white transition-colors">Pro Pack</a>
+            <a href="#compare" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-sm text-zinc-400 hover:text-white transition-colors">Compare</a>
+          </div>
+        )}
       </header>
 
       {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 pt-24 pb-20">
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-16 sm:pt-24 pb-16 sm:pb-20">
         <FadeInUp>
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-1.5 text-xs text-cyan-400 mb-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 sm:px-4 py-1.5 text-xs text-cyan-400 mb-6 sm:mb-8">
               <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
               Works with Claude Code, Cursor, Windsurf, Copilot
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight leading-tight">
               Stop writing AI rules{' '}
               <span className="text-cyan-400">from scratch.</span>
             </h1>
-            <p className="mt-6 text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
               Generate production-ready configs in 10 seconds. Battle-tested rules for{' '}
               <span className="text-white">Claude Code</span> /{' '}
               <span className="text-white">Cursor</span> /{' '}
               <span className="text-white">Windsurf</span> /{' '}
               <span className="text-white">Copilot</span> — one tool for all.
             </p>
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
               <a
                 href="#generator"
-                className="inline-flex items-center justify-center rounded-lg bg-cyan-500 px-6 py-3 text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-cyan-500 px-6 py-3 min-h-[44px] text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
               >
                 Generate Free Rules
               </a>
               <a
                 href="#pro-pack"
-                className="inline-flex items-center justify-center rounded-lg border border-zinc-700 px-6 py-3 text-sm font-semibold text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors"
+                className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-zinc-700 px-6 py-3 min-h-[44px] text-sm font-semibold text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors"
               >
                 Get Pro Pack — $29
               </a>
@@ -114,25 +137,25 @@ export default function Home() {
       </section>
 
       {/* Generator Section */}
-      <section id="generator" className="mx-auto max-w-6xl px-6 py-20">
+      <section id="generator" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
         <FadeInUp>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight">Free Rules Generator</h2>
-            <p className="mt-3 text-zinc-400">Pick your stack, customize preferences, get production-ready rules.</p>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Free Rules Generator</h2>
+            <p className="mt-2 sm:mt-3 text-sm sm:text-base text-zinc-400">Pick your stack, customize preferences, get production-ready rules.</p>
           </div>
         </FadeInUp>
 
         <FadeInUp delay={0.1}>
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-6 sm:gap-8">
             {/* Form */}
-            <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-6 space-y-6">
+            <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 p-4 sm:p-6 space-y-5 sm:space-y-6">
               {/* Framework */}
               <div>
                 <label className="block text-sm font-medium text-zinc-300 mb-2">Framework / Language</label>
                 <select
                   value={framework}
                   onChange={(e) => setFramework(e.target.value as Framework)}
-                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2.5 text-sm text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-colors"
+                  className="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2.5 min-h-[44px] text-sm text-white focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-colors"
                 >
                   {frameworkOptions.map((fw) => (
                     <option key={fw} value={fw}>
@@ -152,7 +175,7 @@ export default function Home() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => toggleStyle(style)}
-                      className={`rounded-lg px-3 py-1.5 text-xs font-medium border transition-colors ${
+                      className={`rounded-lg px-3 py-2 min-h-[36px] text-xs font-medium border transition-colors ${
                         selectedStyles.includes(style)
                           ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400'
                           : 'border-zinc-700 bg-zinc-800 text-zinc-400 hover:border-zinc-600'
@@ -174,7 +197,7 @@ export default function Home() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => setTeamSize(size)}
-                      className={`flex-1 rounded-lg px-3 py-2 text-xs font-medium border transition-colors ${
+                      className={`flex-1 rounded-lg px-3 py-2.5 min-h-[44px] text-xs font-medium border transition-colors ${
                         teamSize === size
                           ? 'border-cyan-500 bg-cyan-500/10 text-cyan-400'
                           : 'border-zinc-700 bg-zinc-800 text-zinc-400 hover:border-zinc-600'
@@ -191,7 +214,7 @@ export default function Home() {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
                 onClick={handleGenerate}
-                className="w-full rounded-lg bg-cyan-500 px-6 py-3 text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
+                className="w-full rounded-lg bg-cyan-500 px-6 py-3 min-h-[48px] text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
               >
                 Generate Rules
               </motion.button>
@@ -206,7 +229,7 @@ export default function Home() {
                     <span className="h-3 w-3 rounded-full bg-zinc-700" />
                     <span className="h-3 w-3 rounded-full bg-zinc-700" />
                   </div>
-                  <span className="text-xs text-zinc-500 ml-2">
+                  <span className="text-xs text-zinc-400 ml-2">
                     {generatedRules ? 'CLAUDE.md' : 'output'}
                   </span>
                 </div>
@@ -215,47 +238,61 @@ export default function Home() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleCopy}
-                    className="text-xs text-zinc-400 hover:text-white transition-colors px-3 py-1 rounded border border-zinc-700 hover:border-zinc-500"
+                    className="text-xs text-zinc-400 hover:text-white transition-colors px-3 py-1.5 min-h-[36px] rounded border border-zinc-700 hover:border-zinc-500 flex items-center"
                   >
                     {copied ? 'Copied!' : 'Copy'}
                   </motion.button>
                 )}
               </div>
-              <div className="p-4 h-[400px] overflow-auto">
+              <div className="p-4 h-[350px] sm:h-[400px] overflow-auto">
                 {generatedRules ? (
-                  <pre className="text-xs text-zinc-300 whitespace-pre-wrap leading-relaxed">
+                  <pre className="text-[11px] sm:text-xs text-zinc-300 whitespace-pre-wrap leading-relaxed break-words">
                     {generatedRules}
                   </pre>
                 ) : (
-                  <div className="flex items-center justify-center h-full text-zinc-600 text-sm">
-                    Click &quot;Generate Rules&quot; to see output
+                  <div className="flex items-center justify-center h-full text-zinc-400 text-sm text-center px-4">
+                    Select your stack and click &quot;Generate Rules&quot; to see output
                   </div>
                 )}
               </div>
             </div>
           </div>
         </FadeInUp>
+
+        {/* Post-generate CTA nudge */}
+        {generatedRules && (
+          <FadeInUp delay={0.15}>
+            <div className="mt-6 sm:mt-8 rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4 sm:p-6 text-center">
+              <p className="text-sm text-zinc-400 mb-1">
+                Want all 50 rule files for 15+ frameworks? Pre-built, production-tested, updated monthly.
+              </p>
+              <a href="#pro-pack" className="text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors">
+                Get the Pro Pack for $29 &rarr;
+              </a>
+            </div>
+          </FadeInUp>
+        )}
       </section>
 
       {/* Pro Pack Section */}
-      <section id="pro-pack" className="mx-auto max-w-6xl px-6 py-20">
+      <section id="pro-pack" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
         <FadeInUp>
-          <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-b from-cyan-500/5 to-transparent p-8 sm:p-12">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="rounded-2xl border border-cyan-500/20 bg-gradient-to-b from-cyan-500/5 to-transparent p-5 sm:p-8 lg:p-12">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-400 mb-6">
+                <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 py-1 text-xs text-cyan-400 mb-4 sm:mb-6">
                   PRO PACK
                 </div>
-                <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
                   50 battle-tested rule files for{' '}
                   <span className="text-cyan-400">15+ frameworks.</span>
                 </h2>
-                <p className="mt-4 text-zinc-400 leading-relaxed">
+                <p className="mt-3 sm:mt-4 text-sm sm:text-base text-zinc-400 leading-relaxed">
                   Skip weeks of trial and error. Get production-proven rules used by teams shipping real products.
                   Works with Claude Code, Cursor, Windsurf, and GitHub Copilot.
                 </p>
 
-                <ul className="mt-8 space-y-3">
+                <ul className="mt-6 sm:mt-8 space-y-3">
                   {[
                     'Tested in production by real teams',
                     'Stack-specific — not generic templates',
@@ -263,7 +300,7 @@ export default function Home() {
                     'Commercial license — use in any project',
                   ].map((feature) => (
                     <li key={feature} className="flex items-center gap-3 text-sm text-zinc-300">
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400 text-xs">
+                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500/10 text-cyan-400 text-xs shrink-0">
                         &#10003;
                       </span>
                       {feature}
@@ -271,9 +308,9 @@ export default function Home() {
                   ))}
                 </ul>
 
-                <div className="mt-10 flex items-end gap-3">
-                  <span className="text-5xl font-bold text-white">$29</span>
-                  <span className="text-zinc-500 text-sm mb-1">USDC / one-time</span>
+                <div className="mt-8 sm:mt-10 flex items-end gap-3">
+                  <span className="text-4xl sm:text-5xl font-bold text-white">$29</span>
+                  <span className="text-zinc-400 text-sm mb-1">USDC / one-time</span>
                 </div>
 
                 <X402Checkout
@@ -287,7 +324,7 @@ export default function Home() {
                   <motion.span
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
-                    className="mt-6 inline-flex items-center justify-center rounded-lg bg-cyan-500 px-8 py-3.5 text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
+                    className="mt-6 inline-flex items-center justify-center rounded-lg bg-cyan-500 px-8 py-3.5 min-h-[48px] text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
                   >
                     Get Pro Pack
                   </motion.span>
@@ -302,9 +339,9 @@ export default function Home() {
                     <span className="h-3 w-3 rounded-full bg-zinc-700" />
                     <span className="h-3 w-3 rounded-full bg-zinc-700" />
                   </div>
-                  <span className="text-xs text-zinc-500 ml-2">rulesforge-pro-pack/</span>
+                  <span className="text-xs text-zinc-400 ml-2">rulesforge-pro-pack/</span>
                 </div>
-                <div className="p-3 h-[400px] overflow-auto space-y-1">
+                <div className="p-2 sm:p-3 h-[300px] sm:h-[400px] overflow-auto space-y-0.5 sm:space-y-1">
                   {proPackFiles.slice(0, 20).map((file, i) => (
                     <motion.div
                       key={file.name}
@@ -312,15 +349,15 @@ export default function Home() {
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.03, duration: 0.3 }}
-                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs hover:bg-zinc-800/50 transition-colors"
+                      className="flex items-center gap-2 sm:gap-3 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 text-xs hover:bg-zinc-800/50 transition-colors"
                     >
                       <span className="text-cyan-400 shrink-0">&#9702;</span>
-                      <span className="text-zinc-300 font-medium shrink-0">{file.name}</span>
-                      <span className="text-zinc-600 truncate">{file.description}</span>
+                      <span className="text-zinc-300 font-medium shrink-0 text-[11px] sm:text-xs">{file.name}</span>
+                      <span className="text-zinc-400 truncate hidden sm:inline">{file.description}</span>
                     </motion.div>
                   ))}
-                  <div className="px-3 py-2 text-xs text-zinc-600">
-                    ... and 30 more files
+                  <div className="px-2 sm:px-3 py-2 text-xs text-zinc-400">
+                    <span className="text-zinc-400">... and {proPackFiles.length - 20} more files</span>
                   </div>
                 </div>
               </div>
@@ -329,24 +366,25 @@ export default function Home() {
         </FadeInUp>
       </section>
 
-      {/* Comparison Table */}
-      <section id="compare" className="mx-auto max-w-6xl px-6 py-20">
+      {/* Comparison Section */}
+      <section id="compare" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
         <FadeInUp>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold tracking-tight">Free vs Pro</h2>
-            <p className="mt-3 text-zinc-400">Choose the right option for your workflow.</p>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Free vs Pro</h2>
+            <p className="mt-2 sm:mt-3 text-sm sm:text-base text-zinc-400">Choose the right option for your workflow.</p>
           </div>
         </FadeInUp>
 
         <FadeInUp delay={0.1}>
           <div className="mx-auto max-w-3xl">
-            <div className="rounded-xl border border-zinc-800 overflow-hidden">
+            {/* Desktop table */}
+            <div className="hidden sm:block rounded-xl border border-zinc-800 overflow-hidden">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-zinc-800 bg-zinc-900/50">
-                    <th className="px-6 py-4 text-left text-zinc-400 font-medium">Feature</th>
-                    <th className="px-6 py-4 text-center text-zinc-400 font-medium">Free Generator</th>
-                    <th className="px-6 py-4 text-center font-medium text-cyan-400">Pro Pack ($29)</th>
+                    <th className="px-4 sm:px-6 py-4 text-left text-zinc-400 font-medium">Feature</th>
+                    <th className="px-4 sm:px-6 py-4 text-center text-zinc-400 font-medium">Free</th>
+                    <th className="px-4 sm:px-6 py-4 text-center font-medium text-cyan-400">Pro ($29)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -363,17 +401,17 @@ export default function Home() {
                     ['Priority support', '--', 'yes'],
                   ].map(([feature, free, pro]) => (
                     <tr key={feature} className="border-b border-zinc-800/50 hover:bg-zinc-900/30 transition-colors">
-                      <td className="px-6 py-3 text-zinc-300">{feature}</td>
-                      <td className="px-6 py-3 text-center text-zinc-500">
+                      <td className="px-4 sm:px-6 py-3 text-zinc-300">{feature}</td>
+                      <td className="px-4 sm:px-6 py-3 text-center text-zinc-500">
                         {free === 'yes' ? (
                           <span className="text-zinc-300">&#10003;</span>
                         ) : free === '--' ? (
-                          <span className="text-zinc-700">--</span>
+                          <span className="text-zinc-500">--</span>
                         ) : (
                           free
                         )}
                       </td>
-                      <td className="px-6 py-3 text-center">
+                      <td className="px-4 sm:px-6 py-3 text-center">
                         {pro === 'yes' ? (
                           <span className="text-cyan-400">&#10003;</span>
                         ) : (
@@ -384,6 +422,46 @@ export default function Home() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            {/* Mobile comparison cards */}
+            <div className="sm:hidden space-y-3">
+              {[
+                ['Rule generation', 'yes', 'yes'],
+                ['Frameworks', '11', '15+'],
+                ['Output formats', 'CLAUDE.md', 'All formats'],
+                ['Pre-built rule files', '--', '50 files'],
+                ['Stack-specific optimizations', '--', 'yes'],
+                ['Monthly updates', '--', 'yes'],
+                ['Commercial license', '--', 'yes'],
+                ['Tool-specific variants', '--', 'yes'],
+                ['Team conventions', 'Basic', 'Enterprise-ready'],
+                ['Priority support', '--', 'yes'],
+              ].map(([feature, free, pro]) => (
+                <div key={feature} className="rounded-lg border border-zinc-800 bg-zinc-900/30 p-3">
+                  <div className="text-sm font-medium text-zinc-300 mb-2">{feature}</div>
+                  <div className="flex justify-between text-xs">
+                    <div className="text-zinc-500">
+                      <span className="text-zinc-400 mr-1">Free:</span>
+                      {free === 'yes' ? (
+                        <span className="text-zinc-300">&#10003;</span>
+                      ) : free === '--' ? (
+                        <span className="text-zinc-500">--</span>
+                      ) : (
+                        free
+                      )}
+                    </div>
+                    <div>
+                      <span className="text-zinc-400 mr-1">Pro:</span>
+                      {pro === 'yes' ? (
+                        <span className="text-cyan-400">&#10003;</span>
+                      ) : (
+                        <span className="text-cyan-400">{pro}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
             <div className="mt-8 text-center">
@@ -398,7 +476,7 @@ export default function Home() {
                 <motion.span
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="inline-flex items-center justify-center rounded-lg bg-cyan-500 px-8 py-3 text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
+                  className="inline-flex items-center justify-center rounded-lg bg-cyan-500 px-8 py-3 min-h-[48px] text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
                 >
                   Get Pro Pack — $29 USDC
                 </motion.span>
@@ -409,17 +487,17 @@ export default function Home() {
       </section>
 
       {/* Cross-sell Footer */}
-      <section className="border-t border-zinc-800/50 mt-20">
-        <div className="mx-auto max-w-6xl px-6 py-16">
+      <section className="border-t border-zinc-800/50 mt-12 sm:mt-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
           <FadeInUp>
-            <div className="text-center mb-10">
-              <p className="text-sm text-zinc-500 uppercase tracking-wider">From AI Business Factory</p>
-              <h3 className="mt-2 text-xl font-bold tracking-tight">More tools for builders</h3>
+            <div className="text-center mb-8 sm:mb-10">
+              <p className="text-sm text-zinc-400 uppercase tracking-wider">From AI Business Factory</p>
+              <h3 className="mt-2 text-lg sm:text-xl font-bold tracking-tight">More tools for builders</h3>
             </div>
           </FadeInUp>
 
           <FadeInUp delay={0.1}>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {[
                 {
                   name: 'Veloce Kit',
@@ -439,12 +517,6 @@ export default function Home() {
                   price: '$19',
                   href: 'https://promptforge.dev',
                 },
-                {
-                  name: 'CryptoPayKit',
-                  desc: 'Add crypto payments to any app in 5 minutes. x402 + Stripe in one SDK.',
-                  price: '$39',
-                  href: 'https://cryptopaykit.com',
-                },
               ].map((product) => (
                 <motion.a
                   key={product.name}
@@ -452,13 +524,13 @@ export default function Home() {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ scale: 1.02, borderColor: 'rgba(6, 182, 212, 0.3)' }}
-                  className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-5 transition-colors hover:bg-zinc-900/60 block"
+                  className="rounded-xl border border-zinc-800 bg-zinc-900/30 p-4 sm:p-5 transition-colors hover:bg-zinc-900/60 block"
                 >
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center justify-between mb-2 sm:mb-3">
                     <span className="text-sm font-semibold text-white">{product.name}</span>
                     <span className="text-xs text-cyan-400 font-medium">{product.price}</span>
                   </div>
-                  <p className="text-xs text-zinc-500 leading-relaxed">{product.desc}</p>
+                  <p className="text-xs text-zinc-400 leading-relaxed">{product.desc}</p>
                 </motion.a>
               ))}
             </div>
@@ -467,8 +539,8 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-800/50 py-8">
-        <div className="mx-auto max-w-6xl px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-600">
+      <footer className="border-t border-zinc-800/50 py-6 sm:py-8">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs text-zinc-400">
           <p>&copy; {new Date().getFullYear()} RulesForge. An AI Business Factory product.</p>
           <div className="flex items-center gap-4">
             <span>Payments powered by x402</span>

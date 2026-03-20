@@ -57,10 +57,9 @@ const PRO_PACK_FILES = [
 ]
 
 const CROSS_SELL = [
-  { name: 'PromptForge', href: 'https://promptforge.com', desc: '200+ production AI prompts', price: '$19' },
-  { name: 'SiteForge', href: 'https://siteforge.com', desc: 'AI landing pages in seconds', price: '$9' },
-  { name: 'CryptoPayKit', href: 'https://cryptopaykit.com', desc: 'x402 developer templates', price: '$29' },
-  { name: 'OGForge', href: 'https://ogforge.com', desc: 'Social cards in one click', price: '$9' },
+  { name: 'PromptForge', href: 'https://promptforge.dev', desc: '200+ production AI prompts', price: '$19' },
+  { name: 'Veloce Kit', href: 'https://velocekit.com', desc: 'Launch SaaS in 48 hours', price: '$247' },
+  { name: 'PageForge', href: 'https://pageforge.ai', desc: 'AI landing pages that convert', price: '$49/mo' },
 ]
 
 const categories = [...new Set(PRO_PACK_FILES.map(f => f.category))]
@@ -93,7 +92,7 @@ export default function SuccessPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#09090b] text-white relative overflow-hidden">
+    <div className="min-h-screen bg-[#0a0a0f] text-white relative overflow-hidden">
       <style>{`
         @keyframes confetti-fall {
           0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
@@ -152,10 +151,10 @@ export default function SuccessPage() {
         />
       ))}
 
-      <div className="max-w-2xl mx-auto px-6 py-16">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {/* Checkmark */}
-        <div className="flex justify-center mb-8">
-          <div className={`w-24 h-24 rounded-full bg-emerald-500/10 flex items-center justify-center ${showCheck ? 'animate-circle-fill' : 'opacity-0'}`}>
+        <div className="flex justify-center mb-6 sm:mb-8">
+          <div className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-emerald-500/10 flex items-center justify-center ${showCheck ? 'animate-circle-fill' : 'opacity-0'}`}>
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
               <circle cx="24" cy="24" r="22" stroke="#10B981" strokeWidth="3" opacity="0.3" />
               <path
@@ -173,9 +172,9 @@ export default function SuccessPage() {
 
         {/* Title */}
         {showContent && (
-          <div className="text-center mb-10 animate-fade-up">
-            <h1 className="text-3xl font-bold mb-3">Payment Confirmed!</h1>
-            <p className="text-zinc-400 text-lg">Pro Pack unlocked &mdash; 50 rule files</p>
+          <div className="text-center mb-8 sm:mb-10 animate-fade-up">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-3">Payment Confirmed!</h1>
+            <p className="text-zinc-400 text-base sm:text-lg">Pro Pack unlocked &mdash; 50 rule files</p>
           </div>
         )}
 
@@ -184,7 +183,7 @@ export default function SuccessPage() {
           <div className="animate-fade-up" style={{ animationDelay: '0.1s' }}>
             <button
               onClick={handleDownload}
-              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 rounded-xl font-semibold text-lg transition-colors flex items-center justify-center gap-3 mb-8"
+              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-4 min-h-[52px] rounded-xl font-semibold text-base sm:text-lg transition-colors flex items-center justify-center gap-3 mb-6 sm:mb-8"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" />
@@ -198,8 +197,8 @@ export default function SuccessPage() {
 
         {/* File list by category */}
         {showContent && (
-          <div className="animate-fade-up mb-10" style={{ animationDelay: '0.2s' }}>
-            <h2 className="text-lg font-semibold mb-4 text-emerald-400">Files included</h2>
+          <div className="animate-fade-up mb-8 sm:mb-10" style={{ animationDelay: '0.2s' }}>
+            <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4 text-emerald-400">Files included</h2>
             <div className="space-y-2">
               {categories.map((cat) => {
                 const files = PRO_PACK_FILES.filter(f => f.category === cat)
@@ -208,16 +207,16 @@ export default function SuccessPage() {
                   <div key={cat} className="bg-[#18181b] border border-[#27272a] rounded-lg overflow-hidden">
                     <button
                       onClick={() => setExpandedCat(isExpanded ? null : cat)}
-                      className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-[#27272a]/50 transition-colors"
+                      className="w-full flex items-center justify-between px-3 sm:px-4 py-3 min-h-[44px] text-left hover:bg-[#27272a]/50 transition-colors"
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2">
                           <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                         </svg>
                         <span className="text-sm font-medium">{cat}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs text-zinc-500">{files.length} files</span>
+                        <span className="text-xs text-zinc-400">{files.length}</span>
                         <svg
                           width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#71717A" strokeWidth="2"
                           className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}
@@ -227,14 +226,14 @@ export default function SuccessPage() {
                       </div>
                     </button>
                     {isExpanded && (
-                      <div className="border-t border-[#27272a] px-4 py-2">
+                      <div className="border-t border-[#27272a] px-3 sm:px-4 py-2">
                         {files.map((file) => (
                           <div key={file.name} className="flex items-center gap-2 py-1.5 text-sm text-zinc-400">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3f3f46" strokeWidth="2">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3f3f46" strokeWidth="2" className="shrink-0">
                               <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
                               <polyline points="14 2 14 8 20 8" />
                             </svg>
-                            <span className="font-mono text-xs">{file.name}</span>
+                            <span className="font-mono text-xs break-all">{file.name}</span>
                           </div>
                         ))}
                       </div>
@@ -248,10 +247,10 @@ export default function SuccessPage() {
 
         {/* CTA */}
         {showContent && (
-          <div className="animate-fade-up mb-16" style={{ animationDelay: '0.3s' }}>
+          <div className="animate-fade-up mb-12 sm:mb-16" style={{ animationDelay: '0.3s' }}>
             <Link
               href="/"
-              className="block text-center bg-[#18181b] border border-[#27272a] hover:border-emerald-500/40 text-emerald-400 py-4 rounded-xl font-semibold transition-colors"
+              className="block text-center bg-[#18181b] border border-[#27272a] hover:border-emerald-500/40 text-emerald-400 py-4 min-h-[48px] rounded-xl font-semibold transition-colors flex items-center justify-center"
             >
               Browse rules &rarr;
             </Link>
@@ -261,22 +260,22 @@ export default function SuccessPage() {
         {/* Cross-sell */}
         {showContent && (
           <div className="animate-fade-up" style={{ animationDelay: '0.4s' }}>
-            <div className="border-t border-[#27272a] pt-10">
-              <p className="text-sm text-zinc-500 text-center mb-6">More tools from the Forge ecosystem</p>
-              <div className="grid grid-cols-2 gap-3">
+            <div className="border-t border-[#27272a] pt-8 sm:pt-10">
+              <p className="text-sm text-zinc-400 text-center mb-4 sm:mb-6">More tools from AI Business Factory</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {CROSS_SELL.map((item) => (
                   <a
                     key={item.name}
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="bg-[#18181b] border border-[#27272a] rounded-lg p-4 hover:border-emerald-500/30 transition-colors group"
+                    className="bg-[#18181b] border border-[#27272a] rounded-lg p-4 min-h-[44px] hover:border-emerald-500/30 transition-colors group"
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-semibold text-sm group-hover:text-emerald-400 transition-colors">{item.name}</span>
                       <span className="text-xs text-emerald-500">{item.price}</span>
                     </div>
-                    <p className="text-xs text-zinc-500">{item.desc}</p>
+                    <p className="text-xs text-zinc-400">{item.desc}</p>
                   </a>
                 ))}
               </div>

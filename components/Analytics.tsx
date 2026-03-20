@@ -2,19 +2,20 @@
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 
-const HUB_URL = typeof window !== 'undefined'
-  ? `${window.location.protocol}//${window.location.hostname}:4000`
-  : 'http://localhost:4000'
-
 export function Analytics({ product }: { product: string }) {
   const pathname = usePathname()
 
   useEffect(() => {
-    fetch(`${HUB_URL}/api/analytics`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ product, path: pathname })
-    }).catch(() => {}) // fire and forget
+    // Only send analytics to the hub when running locally (same machine)
+    if (typeof window === 'undefined') return
+    const hostname = window.location.hostname
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      fetch(`http://localhost:4000/api/analytics`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product, path: pathname })
+      }).catch(() => {}) // fire and forget
+    }
   }, [pathname, product])
 
   return null
