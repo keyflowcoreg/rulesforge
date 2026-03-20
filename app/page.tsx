@@ -14,6 +14,8 @@ import {
   type StyleOption,
   type TeamSize,
 } from '@/lib/rules-data'
+import EmailCapture from '@/components/EmailCapture'
+import { FAQAccordion } from '@/components/FAQAccordion'
 
 function FadeInUp({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   return (
@@ -472,6 +474,55 @@ export default function Home() {
         </FadeInUp>
       </section>
 
+      {/* FAQ Section */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
+        <FadeInUp>
+          <FAQAccordion
+            heading="Frequently Asked Questions"
+            items={[
+              {
+                question: 'What AI coding tools does RulesForge support?',
+                answer: 'RulesForge generates rules for Claude Code (CLAUDE.md), Cursor (.cursorrules), Windsurf (.windsurfrules), and GitHub Copilot (.github/copilot-instructions.md). The Pro Pack includes pre-built rule files for all four tools.',
+              },
+              {
+                question: 'What is included in the Pro Pack?',
+                answer: 'The Pro Pack includes 50 battle-tested rule files covering 15+ frameworks. Each file is stack-specific, tested in production, and includes tool-specific variants for Claude Code, Cursor, Windsurf, and Copilot. You also get monthly updates and a commercial license.',
+              },
+              {
+                question: 'Can I use the free generator for commercial projects?',
+                answer: 'Yes. The free generator output is yours to use in any project, personal or commercial. The Pro Pack adds a formal commercial license with additional guarantees and support.',
+              },
+              {
+                question: 'How are rules different from generic prompts?',
+                answer: 'Rules are persistent configuration files that shape how AI coding tools behave across your entire project. Unlike prompts, they are loaded automatically on every interaction and enforce consistent code style, architecture patterns, and team conventions.',
+              },
+              {
+                question: 'Do I get updates after purchasing the Pro Pack?',
+                answer: 'Yes. The Pro Pack is a one-time purchase of $29 USDC that includes monthly updates with new frameworks, improved rules, and support for the latest tool versions. No subscription required.',
+              },
+              {
+                question: 'What payment methods do you accept?',
+                answer: 'We accept credit/debit cards, Apple Pay, and USDC cryptocurrency via Coinbase Onramp. All payments are processed securely.',
+              },
+            ]}
+          />
+        </FadeInUp>
+      </section>
+
+      {/* Email Capture */}
+      <section className="mx-auto max-w-6xl px-4 sm:px-6 pb-16 sm:pb-20">
+        <FadeInUp>
+          <div className="max-w-lg mx-auto">
+            <EmailCapture
+              heading="Get notified of new rule templates"
+              description="Join 500+ developers. Free updates when we add new frameworks."
+              buttonText="Subscribe"
+              accentColor="#06b6d4"
+            />
+          </div>
+        </FadeInUp>
+      </section>
+
       {/* Cross-sell Footer */}
       <section className="border-t border-zinc-800/50 mt-12 sm:mt-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 py-12 sm:py-16">
@@ -529,8 +580,9 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs text-zinc-400">
           <p>&copy; {new Date().getFullYear()} RulesForge. An AI Business Factory product.</p>
           <div className="flex items-center gap-4">
+            <a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="/terms" className="hover:text-white transition-colors">Terms of Service</a>
             <span>Card, Apple Pay, USDC accepted</span>
-            <span>Powered by Coinbase Onramp</span>
           </div>
         </div>
       </footer>

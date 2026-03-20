@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@/components/Analytics'
+import { CookieBanner } from '@/components/CookieBanner'
 import './globals.css'
 
 const jetbrainsMono = JetBrains_Mono({
@@ -90,6 +91,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-zinc-950 text-white font-mono">
         <Analytics product="rulesforge" />
         {children}
+        <CookieBanner />
       </body>
     </html>
   )
