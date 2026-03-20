@@ -17,6 +17,10 @@ import {
 import EmailCapture from '@/components/EmailCapture'
 import { FAQAccordion } from '@/components/FAQAccordion'
 import { EcosystemFooter } from '@/components/EcosystemFooter'
+import { SplitText } from '@/components/SplitText'
+import { MagneticButton } from '@/components/MagneticButton'
+import { ExitIntent } from '@/components/ExitIntent'
+import { TrustBar } from '@/components/TrustBar'
 
 function FadeInUp({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   return (
@@ -111,7 +115,7 @@ export default function Home() {
               Works with Claude Code, Cursor, Windsurf, Copilot
             </div>
             <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight leading-tight">
-              Stop writing AI rules{' '}
+              <SplitText text="Stop writing AI rules" className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight leading-tight justify-center" />
               <span className="text-cyan-400">from scratch.</span>
             </h1>
             <p className="mt-4 sm:mt-6 text-base sm:text-lg lg:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
@@ -122,22 +126,36 @@ export default function Home() {
               <span className="text-white">Copilot</span> — one tool for all.
             </p>
             <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-              <a
-                href="#generator"
-                className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-cyan-500 px-6 py-3 min-h-[44px] text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
-              >
-                Generate Free Rules
-              </a>
-              <a
-                href="#pro-pack"
-                className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-zinc-700 px-6 py-3 min-h-[44px] text-sm font-semibold text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors"
-              >
-                Get Pro Pack — $29
-              </a>
+              <MagneticButton className="w-full sm:w-auto">
+                <a
+                  href="#generator"
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-cyan-500 px-6 py-3 min-h-[44px] text-sm font-semibold text-black hover:bg-cyan-400 transition-colors"
+                >
+                  Generate Free Rules
+                </a>
+              </MagneticButton>
+              <MagneticButton className="w-full sm:w-auto">
+                <a
+                  href="#pro-pack"
+                  className="w-full sm:w-auto inline-flex items-center justify-center rounded-lg border border-zinc-700 px-6 py-3 min-h-[44px] text-sm font-semibold text-zinc-300 hover:border-zinc-500 hover:text-white transition-colors"
+                >
+                  Get Pro Pack — $29
+                </a>
+              </MagneticButton>
             </div>
           </div>
         </FadeInUp>
       </section>
+
+      {/* TrustBar */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <TrustBar items={[
+          { label: 'Frameworks', value: 15, suffix: '+' },
+          { label: 'Rule Files', value: 50, suffix: '+' },
+          { label: 'Developers', value: 500, suffix: '+' },
+          { label: 'Satisfaction', value: 99, suffix: '%' },
+        ]} />
+      </div>
 
       {/* Generator Section */}
       <section id="generator" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
@@ -525,6 +543,13 @@ export default function Home() {
       </section>
 
       <EcosystemFooter currentProduct="RulesForge" />
+
+      <ExitIntent
+        heading="Wait — get 20% off the Pro Pack"
+        description="50 battle-tested rule files for 15+ frameworks. Use code LAUNCH20 at checkout."
+        ctaText="Get Pro Pack — $29"
+        offer="Limited Time"
+      />
     </div>
   )
 }
