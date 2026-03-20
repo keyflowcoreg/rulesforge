@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { JetBrains_Mono } from 'next/font/google'
 import { Analytics } from '@/components/Analytics'
 import { CookieBanner } from '@/components/CookieBanner'
+import { AnnouncementBar } from '@/components/AnnouncementBar'
+import { NoiseOverlay } from '@/components/NoiseOverlay'
 import './globals.css'
 
 const jetbrainsMono = JetBrains_Mono({
@@ -46,13 +48,15 @@ export const metadata: Metadata = {
     siteName: 'RulesForge',
     title: 'RulesForge — AI Coding Rules Generator',
     description:
-      'Generate battle-tested .cursorrules and CLAUDE.md files for any stack. Free generator + Pro Pack $29.',
+      'Generate production-ready .cursorrules and CLAUDE.md for any framework in 10 seconds',
+    images: [{ url: '/api/og', width: 1200, height: 630 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'RulesForge — AI Coding Rules Generator',
     description:
-      'Generate battle-tested .cursorrules and CLAUDE.md files for any stack. Free generator + Pro Pack $29.',
+      'Generate production-ready .cursorrules and CLAUDE.md for any framework in 10 seconds',
+    images: ['/api/og'],
     creator: '@aibusinessfactory',
   },
   metadataBase: new URL('https://rulesforge.com'),
@@ -81,6 +85,8 @@ export default function RootLayout({
         }) }} />
       </head>
       <body className="min-h-full flex flex-col bg-zinc-950 text-white font-mono">
+        <NoiseOverlay />
+        <AnnouncementBar items={['LAUNCH WEEK \u2014 Limited time pricing', '50 rule files for 15+ frameworks \u2014 Pro Pack $29']} />
         <Analytics product="rulesforge" />
         {children}
         <CookieBanner />
