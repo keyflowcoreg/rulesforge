@@ -3,7 +3,7 @@
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, useInView } from 'framer-motion'
-import { PaymentOptions } from '@/components/stripe/PaymentOptions'
+import { PayNow } from '@/components/paynow'
 import {
   frameworkOptions,
   styleOptions,
@@ -314,13 +314,11 @@ export default function Home() {
                 </div>
 
                 <div className="mt-6 max-w-sm">
-                  <PaymentOptions
+                  <PayNow
                     productName="RulesForge Pro Pack"
                     price={29}
-                    description="50 battle-tested rule files for 15+ frameworks. Commercial license included."
-                    x402Endpoint="/api/pro-pack"
-                    successUrl="/success"
-                    onX402Success={() => router.push('/success')}
+                    description="50 battle-tested rule files for 15+ frameworks"
+                    onSuccess={() => router.push('/success')}
                     accentColor="#06b6d4"
                   />
                 </div>
@@ -461,13 +459,11 @@ export default function Home() {
 
             <div className="mt-8 text-center">
               <div className="max-w-sm mx-auto">
-                <PaymentOptions
+                <PayNow
                   productName="RulesForge Pro Pack"
                   price={29}
-                  description="50 battle-tested rule files for 15+ frameworks. Commercial license included."
-                  x402Endpoint="/api/pro-pack"
-                  successUrl="/success"
-                  onX402Success={() => router.push('/success')}
+                  description="50 battle-tested rule files for 15+ frameworks"
+                  onSuccess={() => router.push('/success')}
                   accentColor="#06b6d4"
                 />
               </div>
@@ -533,8 +529,8 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4 text-xs text-zinc-400">
           <p>&copy; {new Date().getFullYear()} RulesForge. An AI Business Factory product.</p>
           <div className="flex items-center gap-4">
-            <span>Payments via Stripe + x402</span>
-            <span>Card, Apple Pay, Google Pay, USDC</span>
+            <span>Card, Apple Pay, USDC accepted</span>
+            <span>Powered by Coinbase Onramp</span>
           </div>
         </div>
       </footer>
