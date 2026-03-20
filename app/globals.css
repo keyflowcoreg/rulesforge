@@ -17,6 +17,11 @@ body {
   color: var(--foreground);
 }
 
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;

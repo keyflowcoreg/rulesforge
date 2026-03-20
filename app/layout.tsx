@@ -86,7 +86,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-zinc-950 text-white font-mono">
         <NoiseOverlay />
-        <AnnouncementBar items={['LAUNCH WEEK \u2014 Limited time pricing', '50 rule files for 15+ frameworks \u2014 Pro Pack $29']} />
+        <AnnouncementBar items={['LAUNCH WEEK \u2014 Limited time pricing', '50 rule files for 15+ frameworks \u2014 Pro Pack $29']} className="bg-cyan-950/60 text-cyan-300 border-b border-cyan-500/20" />
         <Analytics product="rulesforge" />
         {children}
         <CookieBanner />

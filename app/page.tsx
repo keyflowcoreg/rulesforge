@@ -109,9 +109,14 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="mx-auto max-w-6xl px-4 sm:px-6 pt-16 sm:pt-24 pb-16 sm:pb-20">
+      <section className="relative mx-auto max-w-6xl px-4 sm:px-6 pt-16 sm:pt-24 pb-16 sm:pb-20 overflow-hidden">
+        {/* Cyan grid background */}
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
+          backgroundImage: `linear-gradient(rgba(6,182,212,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(6,182,212,0.3) 1px, transparent 1px)`,
+          backgroundSize: '40px 40px',
+        }} />
         <FadeInUp>
-          <div className="text-center max-w-3xl mx-auto">
+          <div className="relative text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-500/20 bg-cyan-500/10 px-3 sm:px-4 py-1.5 text-xs text-cyan-400 mb-6 sm:mb-8">
               <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 animate-pulse" />
               Works with Claude Code, Cursor, Windsurf, Copilot
@@ -158,6 +163,9 @@ export default function Home() {
           { label: 'Satisfaction', value: 99, suffix: '%' },
         ]} />
       </div>
+
+      {/* Section divider */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6"><div className="h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" /></div>
 
       {/* Generator Section */}
       <section id="generator" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
@@ -302,6 +310,9 @@ export default function Home() {
         <CountdownTimer targetDate="2026-03-27T23:59:59" label="Launch pricing ends in" />
       </section>
 
+      {/* Section divider */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6"><div className="h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" /></div>
+
       {/* Pro Pack Section */}
       <section id="pro-pack" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
         <FadeInUp>
@@ -386,6 +397,9 @@ export default function Home() {
           </div>
         </FadeInUp>
       </section>
+
+      {/* Section divider */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6"><div className="h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" /></div>
 
       {/* Comparison Section */}
       <section id="compare" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
@@ -500,6 +514,9 @@ export default function Home() {
         </FadeInUp>
       </section>
 
+      {/* Section divider */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6"><div className="h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" /></div>
+
       {/* FAQ Section */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
         <FadeInUp>
@@ -548,6 +565,9 @@ export default function Home() {
           </div>
         </FadeInUp>
       </section>
+
+      {/* Section divider */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6"><div className="h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent" /></div>
 
       {/* Testimonials */}
       <section className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-20">
